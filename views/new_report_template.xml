@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <!-- Assets for reports -->
+
+    <template id="report_assets_common">
+        <t t-call="web.less_helpers"/>
+
+        <link href="/web/static/src/less/import_bootstrap.less" rel="stylesheet" type="text/less"/>
+        <link href="/base/static/src/css/description.css" rel="stylesheet" type="text/css"/>
+
+        <link rel="stylesheet" type="text/less" href="/web_editor/static/src/less/web_editor.common.less"/>
+
+        <!-- FIXME remove website / portal dependency ..? -->
+        <link href="/portal/static/src/less/website.wrapwrap.less" rel="stylesheet" type="text/less"/>
+        <link href="/website/static/src/less/website.snippets.less" rel="stylesheet" type="text/less"/>
+
+        <!-- TODO: Put in the right report ..? -->
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:thin,light,regular,medium,bold,semi-bold" rel="stylesheet"/>
+
+        <link href="/web/static/lib/fontawesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+
+        <link href="/web/static/src/less/report.less" rel="stylesheet" type="text/less"/>
+        <link href="/web/static/src/less/layout_background.less" rel="stylesheet" type="text/less"/>
+        <link href="/web/static/src/less/layout_boxed.less" rel="stylesheet" type="text/less"/>
+        <link href="/web/static/src/less/layout_clean.less" rel="stylesheet" type="text/less"/>
+    </template>
+
+    <template id="report_assets_pdf">
+        <link href="/web/static/src/css/reset.min.css" rel="stylesheet"/>
+    </template>
+
+    <template id="report_assets_editor">
+        <t t-call="web.less_helpers"/>
+
+        <link href="/web/static/src/less/report.editor.less" rel="stylesheet" type="text/less"/>
+
+        <script type="text/javascript" src="/web/static/src/js/services/session.js"/>
+        <script type="text/javascript" src="/web/static/src/js/report/utils.js"/>
+        <script type="text/javascript" src='/web/static/src/js/report/report.editor.js' />
+    </template>
+
+    <!-- Private templates used internally by reports -->
+
+    <template id="report_layout" name="Report layout">&lt;!DOCTYPE html&gt;
+        <html t-att-lang="lang and lang.replace('_', '-')"
+              t-att-data-editable="'1' if editable else None"
+              t-att-data-translatable="'1' if translatable else None"
+              t-att-data-edit_translations="'1' if edit_translations else None"
+              t-att-data-main-object="repr(main_object) if editable else None"
+              t-att-data-report-margin-top="data_report_margin_top"
+              t-att-data-report-header-spacing="data_report_header_spacing"
+              t-att-data-report-dpi="data_report_dpi"
+              t-att-web-base-url="web_base_url">
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="initial-scale=1"/>
+                <title><t t-esc="title or 'Flectra Report'"/></title>
+                <t t-call-assets="web.assets_common" t-js="false"/>
+                <t t-call-assets="web.report_assets_common" t-js="false"/>
+                <t t-if="editable">
+                    <t t-call-assets="web_editor.summernote" t-js="false"/>
+                    <t t-call-assets="web_editor.assets_editor" t-js="false"/>
+                    <t t-call-assets="web.report_assets_editor" t-js="false"/>
+                </t>
+                <t t-if="editable">
+                    <t t-call-assets="web.assets_common" t-css="false"/>
+                    <t t-call-assets="web_editor.summernote" t-css="false"/>
+                    <t t-call-assets="web_editor.assets_editor" t-css="false"/>
+                    <t t-call-assets="web.report_assets_editor" t-css="false"/>
+
+                    <script type="text/javascript" src="/web/static/src/js/services/session.js"></script>
+                    <script type="text/javascript" src="/web_editor/static/src/js/content/body_manager.js"/>
+                    <script type="text/javascript" src="/web_editor/static/src/js/root_widget.js"/>
+                    <script type="text/javascript" src="/web_editor/static/src/js/iframe.js"></script>
+                    <script t-if="enable_editor and inline_mode" type="text/javascript" src="/web_editor/static/src/js/inline.js"></script>
+                </t>
+            </head>
+            <body class="container">
+                <div id="wrapwrap">
+                    <main>
+                        <t t-raw="0"/>
+                    </main>
+                </div>
+            </body>
+        </html>
+    </template>
+
+    <template id="html_container">
+        <t t-set="body_classname" t-value="'container'"/>
+        <t t-call="web.report_layout">
+            <t t-raw="0"/>
+        </t>
+    </template>
+
+    <template id="minimal_layout">
+        <t t-raw="'&lt;base href=%s&gt;' % base_url"/>
+        &lt;!DOCTYPE html&gt;
+        <html style="height: 0;">
+            <head>
+                <t t-call-assets="web.report_assets_pdf" t-js="false"/>
+                <t t-call-assets="web.report_assets_common" t-js="false"/>
+                <t t-call-assets="web.report_assets_pdf" t-css="false"/>
+                <t t-call-assets="web.report_assets_common" t-css="false"/>
+                <meta charset="utf-8"/>
+                <t t-if="subst is True">
+                    <script>
+                        function subst() {
+                            var vars = {};
+                            var x = document.location.search.substring(1).split('&amp;');
+                            for (var i in x) {
+                                var z = x[i].split('=', 2);
+                                vars[z[0]] = unescape(z[1]);
+                            }
+                            var x = ['sitepage', 'sitepages', 'section', 'subsection', 'subsubsection'];
+                            var z = {'sitepage': 'page', 'sitepages': 'topage'};
+                            for (var i in x) {
+                                var y = document.getElementsByClassName(z[x[i]] || x[i])
+                                for (var j=0; j&lt;y.length; ++j)
+                                    y[j].textContent = vars[x[i]];
+                            }
+
+                            var index = vars['webpage'].split('.', 4)[3];
+                            var header = document.getElementById('minimal_layout_report_headers');
+                            if(header !== null){
+                                var companyHeader = header.children[index];
+                                header.textContent = '';
+                                header.appendChild(companyHeader);
+                            }
+                            var footer = document.getElementById('minimal_layout_report_footers');
+                            if(footer !== null){
+                                var companyFooter = footer.children[index];
+                                footer.textContent = '';
+                                footer.appendChild(companyFooter);
+                            }
+                        }
+                    </script>
+                </t>
+            </head>
+            <body class="container" onload="subst()">
+                <t t-raw="body"/>
+            </body>
+        </html>
+    </template>
+
+   
+
+    <template id="smart_invoice_layout">
+        <t t-call="web.html_container">
+        <!-- Multicompany -->
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"/><br/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <div class="header">
+                <div class="row text-center">
+                    <h2><span t-esc="company.name"/></h2>
+                        <p><span t-esc="company.street"/> <span t-esc="company.street2"/> <span t-esc="company.city"/>
+                        <span t-esc="company.state_id.name"/><span t-esc="company.zip"/> <span t-esc="company.country_id.name"/><br/>
+                        <span t-esc="company.h_phone"/>
+                        </p>                
+                </div>            
+            </div>
+            <div class="article">            
+                <t t-raw="0" />
+            </div>
+        </t>
+    </template>
+
+
+   
+</flectra>

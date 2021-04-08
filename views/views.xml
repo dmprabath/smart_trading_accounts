@@ -1,0 +1,21 @@
+<flectra>
+  <data>
+
+  <record id="smart_account_inherit_res_partner" model="ir.ui.view">
+    <field name="name">smart.account.inherit.res.partner</field>
+    <field name="model">res.partner</field>
+    <field name="type">form</field>
+    <field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="arch" type="xml">
+   
+      <xpath expr="//field[@name='vat']" position="before">      
+          <field name="cus_tax_types" />
+      </xpath>
+
+    </field>
+  </record>
+
+
+
+  </data>
+</flectra>

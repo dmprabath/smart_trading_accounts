@@ -1,0 +1,64 @@
+<flectra>
+  <data>
+
+    <record id="view_tax_form_universal_tax" model="ir.ui.view">
+        <field name="name">view.tax.form.universal.tax</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_tax_use']" position="after">
+                    <field name="cus_tax_types"/>
+            </xpath>
+        </field>
+    </record>
+
+  <record id="smart_account_inherit_invoice_account" model="ir.ui.view">
+    <field name="name">smart.account.inherit.account.invoice</field>
+    <field name="model">account.invoice</field>
+    <field name="type">form</field>
+    <field name="inherit_id" ref="account.invoice_form"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//button[@name='invoice_print']" position="replace">      
+           <button name="new_invoice_print" string="Print Invoice" type="object" attrs="{'invisible':['|',('sent','=',True), ('state', 'not in', ('open','paid'))]}" class="oe_highlight" groups="base.group_user"/>
+      </xpath>
+      <xpath expr="//button[@name='invoice_print']" position="replace">      
+          <button name="new_invoice_print" string="Print Invoice" type="object" attrs="{'invisible':['|',('sent','=',False), ('state', 'not in', ('open','paid'))]}" groups="base.group_user"/>
+      </xpath>
+
+      <xpath expr="//field[@name='payment_term_id']" position="after">      
+          <field name="cus_tax_types"  readonly="1" force_save="1" />
+      </xpath>
+      <xpath expr="//field[@name='amount_total']" position="after">      
+          <field name="suspended_tax"  attrs="{'invisible':[('cus_tax_types','!=','stax')]}"/>
+          <field name="amount_word" attrs="{'invisible':1}"/>
+      </xpath>
+      <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="attributes">      
+          <attribute name="readonly">1</attribute>
+          <attribute name="force_save">1</attribute>
+          <attribute name="attrs">{'column_invisible':[('parent.cus_tax_types','=','stax')]}</attribute>
+      </xpath>
+      <field name="user_id" position="after">
+        <field name="checkedby_name"/>
+      </field>
+      <field name="currency_id" position="attributes">
+        <attribute name="readonly">1</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+        <field name="user_id" position="attributes">
+        <attribute name="readonly">1</attribute>
+        <attribute name="force_save">1</attribute>
+      </field>
+      
+      <xpath expr="//field[@name='amount_tax']" position="attributes">      
+          <attribute name="attrs">{'invisible':[('cus_tax_types','=','stax')]}</attribute>
+      </xpath>
+
+    </field>
+  </record>
+
+
+
+
+  </data>
+</flectra>

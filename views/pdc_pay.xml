@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flectra>
+    <record id="pdc_pay_ihr1" model="ir.ui.view">
+        <field name="name">pdc.form.inherit</field>
+        <field name="model">pdc.payment</field>
+        <field name="inherit_id" ref="pdc_pay.pdc_payment_form_view"/>
+        <field name="arch" type ="xml">
+            <field name="client_name" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record> 
+</flectra>

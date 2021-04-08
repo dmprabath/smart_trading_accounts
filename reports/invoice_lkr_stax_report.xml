@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    
+
+    <template id="smart_invoice_lkr_stax_document">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                        <div class="row text-center" style="font-family: 'Times New Roman', Times, serif">
+                            <h2><strong><span t-esc="doc.company_id.name"/></strong></h2>
+                            <p>
+                                <span t-esc="doc.company_id.street"/> 
+                                <span t-esc="doc.company_id.street2"/> 
+                                <span t-esc="doc.company_id.city"/>
+                                <span t-if="doc.company_id.state_id"><span t-esc="doc.company_id.state_id.name"/></span> 
+                                <span t-esc="doc.company_id.zip"/> 
+                                <span t-esc="doc.company_id.country_id.name"/><br/>
+                                Tel: <span t-esc="doc.company_id.h_phone"/>
+                            </p>  
+                            <div class="col-xs-5">
+                               
+                                <table  width="100%">
+                                    <tr>
+                                        <td>SVAT No.</td>
+                                        <td style="border:solid 1px black;"><span t-esc="doc.company_id.svat"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">VAT No.</td>
+                                        <td width="70%" style="border:solid 1px black;"><span t-esc="doc.company_id.vat2"/></td>
+                                    </tr>         
+                                </table>
+
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-1">
+                                <table  width="100%">
+                                    <tr>
+                                        <td>Invoice Date:</td>
+                                        <td style="border:solid 1px black;"><span t-esc="doc.date_invoice"/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%">Invoice NO :</td>
+                                        <td width="70%" style="border:solid 1px black;"><span t-esc="doc.number"/></td>
+                                    </tr>
+                                            
+                                            
+                                    <tr>
+                                        <td>Ref NO :</td>
+                                        <td style="border:solid 1px black;"><span t-esc="doc.company_id.name"/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>P.O. NO :</td>
+                                        <td style="border:solid 1px black;"><span t-esc="doc.origin"/> </td>
+                                    </tr>
+                                            
+                                </table>
+                                
+                            </div>
+                            <br/>
+                            
+                        </div>
+                        <br/>
+                        <h3 class="text-uppercase text-center" style="margin-top:5px;"><span ><strong>Suspended Tax Invoice</strong></span></h3>              
+
+                        <div class="row">
+                            <div class="col-xs-6 p-1" style="margin-left:10px;">
+                                <span style="border-bottom:solid 1px black;"><strong>Suppliers To:</strong></span>
+                                <table  width="100%">
+                                    <tr>
+                                        <td width="30%">S.V.A.T. No. </td>
+                                        <td width="70%" style="border:solid 1px black;"><span t-esc="doc.partner_id.svat"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>V.A.T. No. </td>
+                                        <td style="border:solid 1px black;"><span t-esc="doc.partner_id.vat2"/><br/></td>
+                                    </tr>  
+                                     <tr>
+                                        <td></td>
+                                        <td ><br/></td>
+                                    </tr>  
+                                    <tr>
+                                        <td>Name </td>
+                                        <td style="border:solid 1px black;"><strong><span t-esc="doc.partner_id.name"/></strong></td>
+                                    </tr>  
+                                    <tr>
+                                        <td>Address </td>
+                                        <td style="border:solid 1px black;">
+                                            <span t-esc="doc.partner_id.street"/><br/>
+                                            <span t-esc="doc.partner_id.street2"/><br/>
+                                            <span t-esc="doc.partner_id.city"/><br/>
+                                            <span t-if="doc.partner_id.state_id"><span t-esc="doc.partner_id.state_id.name"/><br/></span>
+                                            <span t-esc="doc.partner_id.zip"/><br/>
+                                            <span t-esc="doc.partner_id.country_id.name"/><br/>                                        
+                                        </td>
+                                    </tr>  
+                                    <tr>
+                                        <td></td>
+                                        <td ><br/></td>
+                                    </tr>  
+                                    <tr>
+                                        <td>A.O.D No. </td>
+                                        <td style="border:solid 1px black;"><strong><span t-esc="doc.origin"/></strong></td>
+                                    </tr> 
+                                </table>
+                               
+                            </div>
+                            
+                            
+
+
+                            <div class="col-xs-12 " style="margin-top:15px;" >
+                                <table class="table cus_table" width='100%' > 
+                                    <thead>
+                                        <tr>
+                                            <th width='15%;'  style="border:1px solid black;" >Product Code</th>
+                                            <th width='50%;' style="border:1px solid black;" >Description</th>
+                                            <th width='5%;' style="border:1px solid black;" >Unit</th>
+                                            <th width='10%;'  style="border:1px solid black;">Quantity</th>
+                                            <th width='10%;'  style="border:1px solid black;">Unit Price <span t-esc='doc.currency_id.symbol'/></th>
+                                            <th width='20%;'  style="border:1px solid black;">Amount<span t-esc='doc.currency_id.symbol'/></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.invoice_line_ids" t-as="o">
+                                        <tr >
+                                            <td width='15%;' style="border:1px solid black;"><span t-esc='o.product_id.cus_product_id'/></td>
+                                            <td width='50%;' style="border:1px solid black;"><span t-esc='o.name'/></td>
+                                            <td width='5%;' style="border:1px solid black;"><span t-esc='o.uom_id.name'/></td>
+                                            <td width='10%;' style="border:1px solid black;" class="text-center"><span t-esc='o.quantity'/></td>
+                                            <td width='10%;' style="border:1px solid black;" class="text-right"><span t-esc="'%.2f'% o.price_unit" /></td>
+                                            <td width='10%;' style="border:1px solid black;" class="text-right"><span t-esc="'%.2f'% o.price_subtotal" /></td>
+                                        </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                        
+                            </div>
+                        </div>
+                        
+                        <div class="clearfix">
+                            <div id="total" class="row">  
+                                <div class="col-xs-5 pull-left" style="marigin-top:10px;">
+                                    <p>
+                                        All payments should be made in <br/>
+                                        favour of "<span t-esc="doc.company_id.name"/>"
+                                    </p>
+                                </div>                              
+                                <div class="col-xs-5 pull-right">
+                                    <table class="table table-condensed" style="min-width: 250px;max-width: 400px;page-break-inside: avoid;" width="100%">
+                                        <tr  >
+                                            <td width="70%" class="text-right" style="border:0;"><strong>Total</strong></td>
+                                            <td width="30%" class="text-right" style="border:1px solid black;">
+                                                <span t-field="doc.amount_untaxed" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <!-- <t t-foreach="doc._get_tax_amount_by_group()" t-as="amount_by_group">
+                                            <tr style="border-bottom:1px solid #dddddd;">
+                                                <t t-if="len(doc.tax_line_ids) == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                                    <td><span t-esc="amount_by_group[0]"/></td>
+                                                    <td class="text-right">
+                                                        <span t-esc="amount_by_group[3]" />
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td>
+                                                        <span t-esc="amount_by_group[0]"/>
+                                                        <span>&amp;nbsp;<span>on</span>
+                                                            <t t-esc="amount_by_group[4]"/>
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-esc="amount_by_group[3]"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t> -->
+                                        <tr >
+                                            <td class="text-right" style="border:0;"><strong>V.A.T. 8%</strong></td>
+                                            <td class="text-right" style="border:1px solid black;">
+                                                <span t-field="doc.amount_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr  >
+                                            <td class="text-right" style="border:0;"><strong>Grand Total</strong></td>
+                                            <td class="text-right" style="border:1px solid black;">
+                                                <span t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="doc.currency_id.name=='LKR'">
+                                            <tr  >
+                                                <td width="70%" class="text-right" style="border:0;"><strong>Suspended V.A.T. 8%</strong></td>
+                                                <td width="30%" class="text-right" style="border:1px solid black;">
+                                                    <span t-field="doc.suspended_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        
+                                    </table>
+                                        <t t-if="doc.currency_id.name!='LKR'">
+                                           <div class="col-xs-8 pull-right text-center" style="border-top:1px solid black; border-bottom:1px solid black; margin-bottom:10px;" >
+                                            Exchange Rate :<span  t-esc="doc.currency_id.rate"/>
+                                           </div>
+                                            <!-- <tr>
+                                                <td></td>
+                                                <td style="border-top:1px solid black; border-bottom:1px solid black;" >
+                                                Exchange Rate :<span  t-esc="doc.currency_id.rate"/>
+                                                </td>
+                                            </tr> -->
+                                      
+                                    <table class="table table-condensed" style="min-width: 250px;max-width: 400px;page-break-inside: avoid;">
+                                        
+                                        <tr  >
+                                            <td width="70%" class="text-right" style="border:0;"><strong>Suspended V.A.T. 8%</strong></td>
+                                            <td width="30%" class="text-right" style="border:1px solid black;">
+                                                <span t-field="doc.suspended_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                      
+                        <div class="col-xs-12 border border-dark" style="position:absolute; bottom:-1350px;">
+                                Postal Address:
+                                <p style="padding-left:10px;">
+                                    <span >
+                                        <span t-esc="doc.partner_id.name"/><br/>
+                                        <span t-esc="doc.partner_id.street"/><span t-esc="doc.partner_id.street2"/><br/>
+                                        
+                                        <span t-esc="doc.partner_id.city"/><span t-if="doc.partner_id.state_id"> <span t-esc="doc.partner_id.state_id.name"/></span> <span t-esc="doc.partner_id.zip"/>     <span t-esc="doc.partner_id.country_id.name"/><br/>    
+                                    </span>
+                                
+                                </p>
+
+                                <table width="100%" class="text-center">
+                                    <tbody>
+                                <tr>
+                                    <td  style=" padding-top:20px;"><br/><br/><span t-field="doc.create_uid.name" /></td>
+                                    
+                                    <td  style="padding-top:20px;"><br/><br/>.............................</td>
+                                    <td  style=" padding-top:20px;"><br/><br/>.............................</td>                  
+                                </tr>
+                                <tr>
+                                    <td>Prepared By</td>
+                                    <td>Checked By</td>
+                                    <td>Customer Signature</td>                  
+                                </tr>
+                                </tbody>
+                                </table>
+                        </div>
+                    
+                    <div class="oe_structure"/>
+                </div>
+            </t>
+        </t>
+    </template>
+    <template id="smart_invoice_lkr_stax_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="smart_trading_accounts.smart_invoice_lkr_stax_document" />
+            </t>
+        </t>
+    </template>
+
+</flectra>

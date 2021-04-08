@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <data noupdate="1">
+
+        <!-- <record id="data_normal_tax" model="account.account.tag">
+            <field name="name">Tax Invoice</field>
+            <field name="applicability">taxes</field>
+            <field name="active">True</field>
+        </record>
+        <record id="data_suspended_tax" model="account.account.tag">
+            <field name="name">Suspended Tax</field>
+            <field name="applicability">taxes</field>
+            <field name="active">True</field>
+        </record>
+        <record id="data_inclusive_tax" model="account.account.tag">
+            <field name="name">All Inclusive</field>
+            <field name="applicability">taxes</field>
+            <field name="active">True</field>
+        </record> -->
+
+
+     
+
+    </data>
+</flectra>
